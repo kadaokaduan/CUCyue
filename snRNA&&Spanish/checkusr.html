@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>CUC约身份验证</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <script src="http://code.jquery.com/jquery-1.4.1.js"></script>
+    <script src="../script/api.js"></script>
+    <style>
+    html, body {	
+            height: 100%;	
+            min-width: 320px;	
+        }	
+	
+        body {	
+            font-size: 14px;	
+            background-color: #F8F8F8;	
+        }	
+	
+        * {	
+            outline: 0;	
+        }	
+	
+        .textarea {	
+            margin: 10px 0;	
+            height: 65px;	
+            text-align: center;	
+        }	
+	
+        textarea {	
+            width: 96%;	
+            height: 100%;	
+            background-color: #ffffff;	
+            border: 1px solid #E4E4E4;	
+            padding: 5px;	
+            resize: none;	
+        }
+        .input {	
+            border: 1px solid #E4E4E4;	
+            width: 34%;	
+            height: 30px;	
+            background-color: #ffffff;	
+            line-height: 30px;	
+        }	
+	
+        .input input {	
+            width: 90%;	
+            padding-left: 5px;	
+        }	
+	
+        .input:first-child {	
+            border-right: none;	
+        }	
+        .comment-author {	
+            font-size: 14px;	
+            line-height: 1.25;	
+            margin: 7px 0 5px 3px;	
+            color: #323237;	
+        }	
+	
+        .comment-content {	
+            margin: 8px 5px 8px 3px;	
+            line-height:18px;	
+            font-size: 16px;	
+        }	
+	
+        .comment-oper {	
+            text-align: right;	
+            font-size: 14px;	
+        }	
+	
+        .commentbox-wrap li a {	
+            color: #1e50a2;	
+        }	
+	
+        .comment-oper a {	
+            padding:5px;	
+        }	
+        .commentbox-wrap li {	
+            padding: 7px 10px;	
+            border-bottom: 1px solid #e5e5e5;	
+            letter-spacing: 1px;	
+        }	
+        .comment-vote{	
+            color: #ba2636;	
+        }	
+        .inputdiv{
+        width:70%;
+        height:39px;
+        border:2px solid lightgrey;
+        outline:medium;
+        }
+        .warning{
+        width:95%;float:left;height:20px;font-size:10px;
+        }
+        pre {
+        white-space:pre-wrap;
+  		white-space:-moz-pre-wrap; 
+  		white-space:-pre-wrap; 
+  		white-space:-o-pre-wrap; 
+  		word-wrap:break-word;
+  		}
+  		.img{
+   		 width:100%;
+    	height:auto;
+    	}
+    </style>
+</head>
+<body>
+    <div id='logincont' class="content">
+	<input id='i0' type='text' placeholder='学号' class='inputdiv'><br>
+    <input id='i1' type='password' placeholder='密码' class='inputdiv'><br>
+    <input id='i2' type='text' placeholder='验证码' class='inputdiv'><br>
+    <img id='img' onclick='issue()' src=''><br><div style='text-align:center'></div>
+    <button id='ick' style='height:40px;width:50%;background-color: #0C928D;color: white;border-radius:2px;'>认证</button>
+    </div>	
+
+<script>
+    function issue(){
+    var pageParam = api.pageParam;
+    var token = 0;
+	$('#i0').val(pageParam.id);
+	
+	$.post("http://www.13xinan.com/grade/check_new.php", 
+	{
+	stuid: pageParam.id
+	},
+	function(ret){
+				//console.log(ret.token);	
+	var data = eval('(' + ret + ')');
+	alert (data.flag);
+	token = data.token;
+    if(data.flag==0)
+    {
+        var url = "http://www.13xinan.com/grade/checkusr/"+pageParam.id+"verify.jpg?t="+Math.random();
+	    $("#img").attr("src",url);
+	    
+    }
+
+    }//返回的data是字符串类型
+    );
+    }
+    
+	apiready = function(){
+	var pageParam = api.pageParam;
+	var token = 0;
+	var fun = issue();
+//	function issue(){
+//	$('#i0').val(pageParam.id);
+//	
+//	$.post("http://www.13xinan.com/grade/check_new.php", 
+//	{
+//	stuid: pageParam.id
+//	},
+//	function(ret){
+//				//console.log(ret.token);	
+//	var data = eval('(' + ret + ')');
+//	alert (data.flag);
+//	token = data.token;
+//  if(data.flag==0)
+//  {
+//      var url = "http://www.13xinan.com/grade/checkusr/"+pageParam.id+"verify.jpg";
+//	    $("#img").attr("src",url);
+//  }
+//
+//  }//返回的data是字符串类型
+//  );
+//  }
+
+
+	$('#ick').click(function(){ 
+    var password = $('#i1').val();
+    var captcha = $('#i2').val();
+    $.post("http://www.13xinan.com/grade/login_test.php", 
+	{
+	stuid : pageParam.id,
+	password : password,
+	captcha : captcha,
+	token : token
+	},
+	function(ret){
+				//console.log(ret.token);	
+	var data = eval('(' + ret + ')');
+	alert (data.flag);
+    if(data.flag!=0)
+    {
+        alert ("error!");
+    }
+    else
+    {
+        alert("认证成功！");
+		api.closeWin({
+	    });
+    }
+
+    }//返回的data是字符串类型
+    );
+    });	
+    };
+
+
+</script>
+</body>
+</html>
