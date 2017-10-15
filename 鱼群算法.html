@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>鱼群算法</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+</head>
+<body>
+<h1>鱼群算法改进</h1>
+<h2>原算法缺陷VS改进方法</h2>
+<ul>
+<li>
+引入贪心鱼群的改进人工鱼群算法
+<ul>
+<li><strong>原算法缺陷：</strong>虽然基本鱼群算法全局搜索能力较强，但精确求解能力较弱。局部精确求解时，人工鱼受拥挤度因子相互排斥的问题。假设人工鱼数量在到达某个程度之后，算法陷入局部极值的概率不会随人工鱼数量的增加而明显提高。</li>
+<li><strong>解决方案：</strong>将一定比例的人工鱼转换为具有更利于局部寻优的行为策略的贪心鱼（贪心鱼的比例表示为β，0＜β＜1），从而使算法在后期的收敛性得到改善。</li>
+<li><strong>改进算法描述：</strong>贪心鱼的行为策略不同于普通的人工鱼，其总是跟随在当前处于食物浓度最高的人工鱼Fbest的周围执行觅食行为，如果贪心鱼不在Fbest的跟踪距离之内，则贪心鱼迅速地移动到Fbest的附近一个随机位置，再执行觅食行为。贪心鱼的觅食范围为普通人工鱼的50%，随机选取觅食范围内的一个位置，若Ynext比Ynow优，则移动到该位置。若贪心鱼反复尝试try_number之后未能找到最高的食物浓度位置，则随机移动一步。当贪心鱼到达的新位置的最高食物浓度位置比Ybest更优时，Fbest将得知并直接到达该位置。此外，贪心鱼的聚群和追尾行为改为直接随机移动一步。</li>
+</ul>
+</li>
+<li>
+觅食行为的改进
+<ul>
+<li><strong>原算法缺陷：</strong>算法中的觅食行为是根据 Yi和 Yj 大小对比，决定下一步前进方向，条件为：反复尝试
+try_number 次后，如果仍不满足前进条件，则随机移
+动一步。算法启发性不足，鱼群整体寻优效果不佳。</li>
+<li><strong>解决方案：</strong>启发式动态调整人工鱼的视野与步长，保证觅食成功，改善鱼群整体寻优效果。</li>
+<li><strong>改进算法描述：</strong>若追尾行为、群聚行为、
+觅食行为均无法在 try_number 次内满足，则加倍扩大
+该条人工鱼的视野与步长，令 Visual=n Visual，
+(n=2,3,4…)，Step=nStep，(n=2,3,4…)，再次进行觅食，
+直至觅食成功，此行为称为特殊觅食行为。成功觅食
+后，该条鱼的视野与步长返回到初始值。特殊觅食行
+为避免了最差适应值的出现，保证每一条鱼均实现有
+效觅食，改善了鱼群整体的寻优效果。</li>
+</ul>
+</li>
+<li>
+<p>视野步长的动态调整</p>
+<ul>
+<li><strong>原算法缺陷：</strong>虽然基本AFSA全局搜索能力较强，但精确求解能力较弱，文献［7］提出了随着迭代次数增加而逐渐缩小步长与视野的改进方法， 取得了良好的优化效果。</li>
+<li><strong>解决方案：</strong>随着迭代次数增加而逐渐缩小步长与视野。</li>
+<li><strong>改进算法描述：</strong></li>
+</ul>
+<p><img src="https://github.com/kadaokaduan/CUCyue/blob/master/yu.PNG?raw=true" /></p>
+<p>其中， Visualmin=0．001；Stepmin=0．0002；t为当前迭代次数；Tmax为最大迭代次数。</p>
+</li>
+</ul>
+<h2>综合改进算法：</h2>
+<pre><code>1. 设定人工鱼群规模M和贪心鱼的比例β，视野Vi- sual和步长Step、拥挤度δ、和最大重复尝试次数try_num-ber、最大迭代次数Tmax等参数，初始化M（1－β）条普通的人工鱼和Mβ条贪心鱼，并在搜索范围内随机初始化每条人工鱼的位置。 
+2. 计算每条人工鱼的适应度，与公告板的的历史最优状态和当代最优状态相比较，若有更优值，则更新它们。
+3. 每条普通人工鱼或贪心鱼执行觅食、追尾、聚群和随机行为，更新自己的位置。
+4. 根据式（1）调整人工鱼和贪心鱼的视野和步长，并重置公告板的当代最优状态。 
+5. 检查是否满足终止条件（达到预设的迭代代数或寻优精度），如果满足终止条件，输出最优解，算法终止；否则，转步骤（2）。
+</code></pre>
+
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
